@@ -1,0 +1,21 @@
+
+def classication_model_testing(X,y):
+    from sklearn.metrics import f1_score
+    from sklearn.pipeline import Pipeline
+    from sklearn.svm import LinearSVC, NuSVC, SVC
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    from sklearn.linear_model import LogisticRegressionCV, LogisticRegression, SGDClassifier
+    from sklearn.ensemble import BaggingClassifier, ExtraTreesClassifier, RandomForestClassifier
+    from yellowbrick.classifier import ClassificationReport,DiscriminationThreshold
+    from sklearn.pipeline import Pipeline
+    models = [SVC(gamma='auto'), NuSVC(gamma='auto'), LinearSVC(), SGDClassifier(max_iter=100, tol=1e-3), KNeighborsClassifier(),    LogisticRegression(solver='lbfgs'), LogisticRegressionCV(cv=3),BaggingClassifier(), ExtraTreesClassifier(n_estimators=300),    RandomForestClassifier(n_estimators=300)]
+    try:
+        for model in models:
+            Model = Pipeline([('one_hot_encoder', OneHotEncoder()),('estimator', model)])
+            visualiser=ClassificationReport(Model, classes=['unacc','acc','good','vgood'],cmap="YlGn",size=(600, 360))
+            visualiser.fit(X, y)
+            visualiser.score(X, y)
+            visualiser.show()
+    except Exception as e:
+        print('Model is not Working ' + str(e))
